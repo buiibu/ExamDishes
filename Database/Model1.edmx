@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище ListDishesModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Dishes">
+          <Key>
+            <PropertyRef Name="idDishes" />
+          </Key>
+          <Property Name="idDishes" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nameDishes" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="readinessDishes" Type="bit" />
+        </EntityType>
+        <EntityType Name="Ingredients">
+          <Key>
+            <PropertyRef Name="idIngr" />
+          </Key>
+          <Property Name="idIngr" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nameIngr" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="proteinsIngr" Type="float" Nullable="false" />
+          <Property Name="fatsIngr" Type="float" Nullable="false" />
+          <Property Name="carbohydratesIngr" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Recipe">
+          <Key>
+            <PropertyRef Name="idIngr" />
+            <PropertyRef Name="idDishes" />
+          </Key>
+          <Property Name="idIngr" Type="int" Nullable="false" />
+          <Property Name="idDishes" Type="int" Nullable="false" />
+          <Property Name="weight" Type="float" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Recipe__idDishes__3E52440B">
+          <End Role="Dishes" Type="Self.Dishes" Multiplicity="1" />
+          <End Role="Recipe" Type="Self.Recipe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dishes">
+              <PropertyRef Name="idDishes" />
+            </Principal>
+            <Dependent Role="Recipe">
+              <PropertyRef Name="idDishes" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recipe__idIngr__3D5E1FD2">
+          <End Role="Ingredients" Type="Self.Ingredients" Multiplicity="1" />
+          <End Role="Recipe" Type="Self.Recipe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredients">
+              <PropertyRef Name="idIngr" />
+            </Principal>
+            <Dependent Role="Recipe">
+              <PropertyRef Name="idIngr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ListDishesModelContainer">
+          <EntitySet Name="Dishes" EntityType="Self.Dishes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ingredients" EntityType="Self.Ingredients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Recipe" EntityType="Self.Recipe" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Recipe__idDishes__3E52440B" Association="Self.FK__Recipe__idDishes__3E52440B">
+            <End Role="Dishes" EntitySet="Dishes" />
+            <End Role="Recipe" EntitySet="Recipe" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recipe__idIngr__3D5E1FD2" Association="Self.FK__Recipe__idIngr__3D5E1FD2">
+            <End Role="Ingredients" EntitySet="Ingredients" />
+            <End Role="Recipe" EntitySet="Recipe" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ListDishesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Dish">
+          <Key>
+            <PropertyRef Name="idDishes" />
+          </Key>
+          <Property Name="idDishes" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nameDishes" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="readinessDishes" Type="Boolean" />
+          <NavigationProperty Name="Recipes" Relationship="Self.FK__Recipe__idDishes__3E52440B" FromRole="Dishes" ToRole="Recipe" />
+        </EntityType>
+        <EntityType Name="Ingredient">
+          <Key>
+            <PropertyRef Name="idIngr" />
+          </Key>
+          <Property Name="idIngr" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nameIngr" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="proteinsIngr" Type="Double" Nullable="false" />
+          <Property Name="fatsIngr" Type="Double" Nullable="false" />
+          <Property Name="carbohydratesIngr" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Recipes" Relationship="Self.FK__Recipe__idIngr__3D5E1FD2" FromRole="Ingredients" ToRole="Recipe" />
+        </EntityType>
+        <EntityType Name="Recipe">
+          <Key>
+            <PropertyRef Name="idIngr" />
+            <PropertyRef Name="idDishes" />
+          </Key>
+          <Property Name="idIngr" Type="Int32" Nullable="false" />
+          <Property Name="idDishes" Type="Int32" Nullable="false" />
+          <Property Name="weight" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Dish" Relationship="Self.FK__Recipe__idDishes__3E52440B" FromRole="Recipe" ToRole="Dishes" />
+          <NavigationProperty Name="Ingredient" Relationship="Self.FK__Recipe__idIngr__3D5E1FD2" FromRole="Recipe" ToRole="Ingredients" />
+        </EntityType>
+        <Association Name="FK__Recipe__idDishes__3E52440B">
+          <End Role="Dishes" Type="Self.Dish" Multiplicity="1" />
+          <End Role="Recipe" Type="Self.Recipe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dishes">
+              <PropertyRef Name="idDishes" />
+            </Principal>
+            <Dependent Role="Recipe">
+              <PropertyRef Name="idDishes" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recipe__idIngr__3D5E1FD2">
+          <End Role="Ingredients" Type="Self.Ingredient" Multiplicity="1" />
+          <End Role="Recipe" Type="Self.Recipe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredients">
+              <PropertyRef Name="idIngr" />
+            </Principal>
+            <Dependent Role="Recipe">
+              <PropertyRef Name="idIngr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ListDishesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Dishes" EntityType="Self.Dish" />
+          <EntitySet Name="Ingredients" EntityType="Self.Ingredient" />
+          <EntitySet Name="Recipes" EntityType="Self.Recipe" />
+          <AssociationSet Name="FK__Recipe__idDishes__3E52440B" Association="Self.FK__Recipe__idDishes__3E52440B">
+            <End Role="Dishes" EntitySet="Dishes" />
+            <End Role="Recipe" EntitySet="Recipes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recipe__idIngr__3D5E1FD2" Association="Self.FK__Recipe__idIngr__3D5E1FD2">
+            <End Role="Ingredients" EntitySet="Ingredients" />
+            <End Role="Recipe" EntitySet="Recipes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ListDishesModelContainer" CdmEntityContainer="ListDishesEntities">
+          <EntitySetMapping Name="Dishes">
+            <EntityTypeMapping TypeName="ListDishesModel.Dish">
+              <MappingFragment StoreEntitySet="Dishes">
+                <ScalarProperty Name="idDishes" ColumnName="idDishes" />
+                <ScalarProperty Name="nameDishes" ColumnName="nameDishes" />
+                <ScalarProperty Name="readinessDishes" ColumnName="readinessDishes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ingredients">
+            <EntityTypeMapping TypeName="ListDishesModel.Ingredient">
+              <MappingFragment StoreEntitySet="Ingredients">
+                <ScalarProperty Name="idIngr" ColumnName="idIngr" />
+                <ScalarProperty Name="nameIngr" ColumnName="nameIngr" />
+                <ScalarProperty Name="proteinsIngr" ColumnName="proteinsIngr" />
+                <ScalarProperty Name="fatsIngr" ColumnName="fatsIngr" />
+                <ScalarProperty Name="carbohydratesIngr" ColumnName="carbohydratesIngr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Recipes">
+            <EntityTypeMapping TypeName="ListDishesModel.Recipe">
+              <MappingFragment StoreEntitySet="Recipe">
+                <ScalarProperty Name="idIngr" ColumnName="idIngr" />
+                <ScalarProperty Name="idDishes" ColumnName="idDishes" />
+                <ScalarProperty Name="weight" ColumnName="weight" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
